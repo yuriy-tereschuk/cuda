@@ -17,14 +17,12 @@ int main(int argc, char** argv)
   std::cout << "A:" << std::endl;
   printm(matrix_a, m, k);
 
-  increment_col(matrix_a, matrix_b, m, k);
-
-  std::cout << "B: increment col" << std::endl;
+  std::cout << "B: increment threads" << std::endl;
+  increment_threads(matrix_a, matrix_b, m, k);
   printm(matrix_b, m, k);
   
-  increment_row(matrix_a, matrix_b, m, k);
-
-  std::cout << "B: increment row" << std::endl;
+  std::cout << "B: increment blocks" << std::endl;
+  increment_blocks(matrix_a, matrix_b, m, k);
   printm(matrix_b, m, k);
 
   return 0;

@@ -5,22 +5,22 @@
 #include "matrix.h"
 
 __global__
-void IncrementRow(const int* a, int* b, int m, int k)
+void IncrementThreads(const int* a, int* b, int m, int k)
 {
   int idx = blockIdx.x * blockDim.x + threadIdx.x;
 
-  b[idx] = a[idx] * 2;
+  b[idx] = a[idx] * threadIdx.x;
 }
 
 __global__
-void IncrementCol(const int* a, int* b, int m, int k)
+void IncrementBlocks(const int* a, int* b, int m, int k)
 {
   int idx = threadIdx.x + threadIdx.y;
 
-  b[idx] = a[idx] * 2;
+  b[idx] = a[idx] * threadIdx.y;
 }
 
-void increment_col(int* matrix_a, int* matrix_b, int n, int k)
+void increment_threads(int* matrix_a, int* matrix_b, int n, int k)
 {
   cudaError_t errors;
   int *d_ma, *d_mb;
@@ -43,7 +43,7 @@ void increment_col(int* matrix_a, int* matrix_b, int n, int k)
 
   cudaMemcpy(d_ma, matrix_a, matrix_size, cudaMemcpyHostToDevice);
 
-  IncrementCol<<<1, 16>>>(d_ma, d_mb, n, k);
+  IncrementThreads<<<1, 16>>>(d_ma, d_mb, n, k);
 
   errors = cudaDeviceSynchronize();
   if (errors != cudaSuccess)
@@ -58,7 +58,7 @@ void increment_col(int* matrix_a, int* matrix_b, int n, int k)
   cudaFree(d_mb);
 }
 
-void increment_row(int* matrix_a, int* matrix_b, int m, int k)
+void increment_blocks(int* matrix_a, int* matrix_b, int m, int k)
 {
   cudaError_t errors;
   int *d_ma, *d_mb;
@@ -81,7 +81,7 @@ void increment_row(int* matrix_a, int* matrix_b, int m, int k)
 
   cudaMemcpy(d_ma, matrix_a, matrix_size, cudaMemcpyHostToDevice);
 
-  IncrementRow<<<1, 16>>>(d_ma, d_mb, m, k);
+  IncrementBlocks<<<16, 1>>>(d_ma, d_mb, m, k);
 
   errors = cudaDeviceSynchronize();
   if (errors != cudaSuccess)
