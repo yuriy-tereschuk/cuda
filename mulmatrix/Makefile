@@ -12,16 +12,22 @@ LDFLAGS = -L. $(CUDA_LIBS) $(CUDA_ARTLIB) $(MATH_ARMALIB)
 
 TARGET := app
 
-all: matrix cuda_matrix tools
-	$(CXX) matrix.o cuda_matrix.o tools.o -o $(TARGET) $(LDFLAGS)
+all: matrix cuda_matrix_increment cuda_matrix_transposition cuda_matrix_multiply tools
+	$(CXX) matrix.o cuda_matrix_increment.o cuda_matrix_transposition.o cuda_matrix_multiply.o tools.o -o $(TARGET) $(LDFLAGS)
 
 tools:
 	$(CXX) tools.cc -c -o tools.o
 
-cuda_matrix:
-	$(CXX) matrix.cu -c -o cuda_matrix.o $(CXXFLAGS)
+cuda_matrix_increment:
+	$(CXX) increment.cu -c -o cuda_matrix_increment.o $(CXXFLAGS)
 
-matrix: tools cuda_matrix
+cuda_matrix_transposition:
+	$(CXX) transposition.cu -c -o cuda_matrix_transposition.o $(CXXFLAGS)
+
+cuda_matrix_multiply:
+	$(CXX) multiply.cu -c -o cuda_matrix_multiply.o $(CXXFLAGS)
+
+matrix:
 	$(CXX) matrix.cc -c -o matrix.o
 
 clean:
