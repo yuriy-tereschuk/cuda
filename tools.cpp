@@ -1,6 +1,7 @@
 #include "tools.h"
 
 #include <iostream>
+#include <iomanip>
 
 void printm(int* matrix, int weight, int height)
 {
@@ -9,9 +10,9 @@ void printm(int* matrix, int weight, int height)
 		for (int h = 0; h < height; ++h)
 		{
 			int value = *matrix++;
-			std::cout << value << " ";
+			std::cout << std::setw(4) << std::left << value;
 		}
-		std::cout << std::endl;
+		std::cout << std::endl << std::endl;
 	}
 }
 

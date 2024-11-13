@@ -16,7 +16,7 @@ void MatrixBlockMask(int* c, const int* a, const int* b, int w, int h)
 	int row = blockDim.y * blockIdx.y + threadIdx.y;
 	int col = blockDim.x * blockIdx.x + threadIdx.x;
 
-	c[row * w + col] = blockIdx.y + blockIdx.x + (blockIdx.y * (blockDim.x - 1));
+	c[row * w + col] = blockIdx.y * (w/blockDim.y) + blockIdx.x;
 }
 
 /*
@@ -37,7 +37,7 @@ void matrix_block_mask(int* c, const int* a, const int *b, int w, int h)
 	cudaMemcpy(d_a, a, N, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_b, b, N, cudaMemcpyHostToDevice);
 
-	dim3 dimBlock(4, 8);
+	dim3 dimBlock(4, 4);
 	dim3 dimGrid(w / dimBlock.x, h / dimBlock.y);
 
 	MatrixBlockMask<<<dimGrid, dimBlock>>> (d_c, d_a, d_b, w , h);
