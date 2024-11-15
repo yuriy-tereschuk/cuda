@@ -11,8 +11,6 @@
 __global__ 
 void MatrixBlockMask(int* c, const int* a, const int* b, int w, int h)
 {
-
-
 	int row = blockDim.y * blockIdx.y + threadIdx.y;
 	int col = blockDim.x * blockIdx.x + threadIdx.x;
 
